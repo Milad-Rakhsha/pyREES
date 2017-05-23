@@ -60,6 +60,23 @@
                 specular_exponent="10.0"
         />
 
+        <visual_material
+                name="plug"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.55, 0.25, 0.25]"
+                Ka="[0.55, 0.25, 0.25]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="socket"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.25, 0.55]"
+                Ka="[0.25, 0.25, 0.55]"
+                specular_exponent="10.0"
+        />
+        
+
     </visualization>
 
     <engine>
@@ -134,4 +151,3 @@
     </engine>
 
 </scene>
-

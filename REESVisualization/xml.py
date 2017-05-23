@@ -166,7 +166,7 @@ def load_from_elementtree(root):
 
     visualization_tag = root.find('visualization')
     if visualization_tag is None:
-        raise RuntimeError('load(): no visualization element')
+        raise RuntimeError('load(): No visualization element')
 
     light_setup = LightSetup()
     for light_tag in visualization_tag.iter('light'):

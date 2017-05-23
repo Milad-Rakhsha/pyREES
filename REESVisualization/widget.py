@@ -211,9 +211,19 @@ class RenderWidget(QOpenGLWidget):
         vbo = VBO(vertex_data, index_data)
         shape_node = ShapeNode(scene_graph.program, vao, vbo)
 
+        if 'socket' in self.materials:
+            socket_material = self.materials['socket']
+        else:
+            raise RuntimeError('create_joint_connectors_graph(): Missing socket visual material')
+
+        if 'plug' in self.materials:
+            plug_material = self.materials['plug']
+        else:
+            raise RuntimeError('create_joint_connectors_graph(): Missing plug visual material')
+
         instance = JointConnectorsInstanceNode(shape_node,
-                                               self.materials['socket'],
-                                               self.materials['plug'],
+                                               socket_material,
+                                               plug_material,
                                                self.contact_scale,
                                                self.engine
                                                )
