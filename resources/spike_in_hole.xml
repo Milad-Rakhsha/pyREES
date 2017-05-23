@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<scene>
+
+    <visualization clear_color="[0.3, 0.3, 0.3]" contact_scale="0.5">
+
+        <camera eye="[0, 10, 10]" center="[0, 0, 0]"  up="[0, 1, 0]" near="0.1" far="100" fovy="45.0"/>
+
+        <movie_recorder
+                path="./resources"
+                basename="screen_"
+                type="jpg"
+                on="False"
+        />
+
+        <light idx="0" position="[0, 10, 0]" target="[0, 0, 0]" Is="[0.5, 0.5, 0.5]"  Id="[0.7, 0.7, 0.7]"  Ia="[0.2, 0.2, 0.2]" cutoff_angle="45.0" attenuation="0.01"/>
+        <light idx="1" position="[0, -10, 0]" target="[0, 0, 0]" Is="[0.5, 0.5, 0.5]"  Id="[0.7, 0.7, 0.7]"  Ia="[0.2, 0.2, 0.2]" cutoff_angle="45.0" attenuation="0.01"/>
+
+        <grid on="True" start_x="-10.0" end_x="10.0"  cells_x="50" start_z="-10.0" end_z="10.0"  cells_z="50"/>
+
+        <visual_material
+                name="red"
+                wire_color="[0.9, 0.1, 0.1]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.75, 0.25, 0.25]"
+                Ka="[0.75, 0.25, 0.25]"
+                specular_exponent="10.0"
+        />
+        <visual_material
+                name="green"
+                wire_color="[0.1, 0.9, 0.1]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.75, 0.25]"
+                Ka="[0.25, 0.75, 0.25]"
+                specular_exponent="10.0"
+        />
+        <visual_material
+                name="blue"
+                wire_color="[0.1, 0.1, 0.9]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.25, 0.75]"
+                Ka="[0.25, 0.25, 0.75]"
+                specular_exponent="10.0"
+        />
+        <visual_material
+                name="grid"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.95, 0.95, 0.095]"
+                Ka="[0.95, 0.95, 0.095]"
+                specular_exponent="10.0"
+        />
+        <visual_material
+                name="contact"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.5, 1.0]"
+                Ka="[0.25, 0.5, 1.0]"
+                specular_exponent="10.0"
+        />
+
+    </visualization>
+
+    <engine>
+
+        <solver_parameters
+            on="False"
+            mode="simulate"
+            fsp="60.0"
+            time_step="0.01"
+            current_time="0.0"
+            total_time="1.0"
+            save_restart="True"
+            load_restart="False"
+            restart_path = "./resources"
+            restart_filename = "restart.xml"
+        />
+
+        <motion_recorder
+            filename="motion.xml"
+            load="False"
+            on="True"
+            path="./resources"
+            save="True"
+        />
+
+        <profiler
+            filename="profiling.xml"
+            on="False"
+            path="./resources"
+        />
+
+        <python>
+            density = 10.0
+
+            create_gravity_force(engine, 'earth', 9.82, V3.make(0.0, 1.0, 0.0))
+            create_damping_force(engine, 'air', 0.01, 0.01)
+
+            points = [V3.make(-1.0, 0.0, -1.0), V3.make(1.0, 0.0, -1.0),V3.make(-1.0, 0.0, 1.0),V3.make(1.0, 0.0, 1.0),V3.make(0.0, 2.0, 1.0), V3.make(0.0, 2.0, -1.0) ]
+            create_convex_shape(engine, 'wedge', points)
+
+            points = [V3.make(-1.0, 0.0, -1.0),V3.make(1.0, 0.0, -1.0),V3.make(-1.0, 0.0, 1.0),V3.make(1.0, 0.0, 1.0),V3.make(0.0, 2.0, 0.0), ]
+            create_convex_shape(engine, 'spike', points)
+
+            create_shape_from_obj(engine, 'hole', 'resources/objs/hole.obj')
+            scale_shape(engine, 'hole', 2.0, 2.0, 2.0)
+
+            create_material_behavior(engine, 'phantom', 'phantom', 0.0, V3.make(0.5, 0.5, 0.0))
+
+            body_name = generate_unique_name(engine, 'spike')
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'free')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'phantom')
+            connect_shape(engine, body_name, 'spike')
+            set_position(engine, body_name, V3.make(0.0, 3.0, 0.0), True)
+            set_orientation(engine, body_name, Q.Rx(pi), True )
+            set_velocity(engine, body_name, V3.make(1.0, 0.0, 0.0) )
+            set_mass_properties_from_shape(engine, body_name, density)
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'air')
+            set_visual_material(engine, body_name, 'blue')
+
+            body_name = generate_unique_name(engine, 'hole')
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'fixed')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'phantom')
+            connect_shape(engine, body_name, 'hole')
+            set_position(engine, body_name, V3.make(0.0, 1.0, 0.0), True)
+            set_orientation(engine, body_name, Q.identity(), True )
+            set_mass_properties_from_shape(engine, body_name, density)
+            set_visual_material(engine, body_name, 'green')
+
+
+            create_ground(engine, V3.zero(), Q.identity(), density, 'phantom', 'red')
+        </python>
+
+    </engine>
+
+</scene>
+

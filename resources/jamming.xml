@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<scene>
+
+    <visualization clear_color="[0.3, 0.3, 0.3]">
+        <camera eye="[0, 10, 10]" center="[0, 0, 0]"  up="[0, 1, 0]" near="0.1" far="100" fovy="45.0"/>
+
+        <light idx="0" position="[0, 10, 0]" target="[0, 0, 0]" Is="[0.5, 0.5, 0.5]"  Id="[0.7, 0.7, 0.7]"  Ia="[0.2, 0.2, 0.2]" cutoff_angle="45.0" attenuation="0.01"/>
+        <light idx="1" position="[0, -10, 0]" target="[0, 0, 0]" Is="[0.5, 0.5, 0.5]"  Id="[0.7, 0.7, 0.7]"  Ia="[0.2, 0.2, 0.2]" cutoff_angle="45.0" attenuation="0.01"/>
+
+        <grid on="True" start_x="-10.0" end_x="10.0"  cells_x="50" start_z="-10.0" end_z="10.0"  cells_z="50"/>
+
+        <visual_material
+                name="red"
+                wire_color="[0.9, 0.1, 0.1]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.75, 0.25, 0.25]"
+                Ka="[0.75, 0.25, 0.25]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="yellow"
+                wire_color="[0.9, 0.9, 0.1]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.75, 0.75, 0.25]"
+                Ka="[0.75, 0.75, 0.25]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="turkis"
+                wire_color="[0.1, 0.9, 0.9]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.75, 0.75]"
+                Ka="[0.25, 0.75, 0.75]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="green"
+                wire_color="[0.1, 0.9, 0.1]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.75, 0.25]"
+                Ka="[0.25, 0.75, 0.25]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="blue"
+                wire_color="[0.1, 0.1, 0.9]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.25, 0.75]"
+                Ka="[0.25, 0.25, 0.75]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="purple"
+                wire_color="[0.9, 0.1, 0.9]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.75, 0.25, 0.75]"
+                Ka="[0.75, 0.25, 0.75]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="grid"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.95, 0.95, 0.095]"
+                Ka="[0.95, 0.95, 0.095]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="contact"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.5, 1.0]"
+                Ka="[0.25, 0.5, 1.0]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="plug"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.55, 0.25, 0.25]"
+                Ka="[0.55, 0.25, 0.25]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="socket"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.25, 0.55]"
+                Ka="[0.25, 0.25, 0.55]"
+                specular_exponent="10.0"
+        />
+
+
+    </visualization>
+
+    <engine>
+        <python>
+            create_gravity_force(engine, 'earth', 0.982, V3.make(0.0, 1.0, 0.0))
+            create_damping_force(engine, 'wind', 0.01, 0.01)
+            create_material_behavior(engine, 'crusty', 'crusty', 0.0, V3.make(0.5, 0.5, 0.0))
+
+            create_box_shape(engine, 'column', 1.5, 6.0, 2.5 )
+            create_box_shape(engine, 'base', 7.0, 1.5, 2.5 )
+            create_sphere_shape(engine, 'sphere', 1.0 )
+
+            body_name = 'body0'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'fixed')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, 'body0', 'base')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(0.0, -0.75, 0.0), True)
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'blue')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+            body_name = 'body1'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'fixed')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, body_name, 'column')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(-2.75, 3.0, 0.0), True)
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'blue')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+            body_name = 'body2'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'fixed')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, body_name, 'column')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(2.75, 3.0, 0.0), True)
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'blue')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+            body_name = 'body3'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'free')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, body_name, 'sphere')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(-1.0, 1.0, 0.0))
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'red')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+            body_name = 'body4'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'free')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, body_name, 'sphere')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(1.0, 1.0, 0.0))
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'green')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+            body_name = 'body5'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'free')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, body_name, 'sphere')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(0.0, sqrt(3.0)+1.0, 0.0))
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'purple')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+
+            body_name = 'body6'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'free')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, body_name, 'sphere')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(-1.0, 2.0*sqrt(3.0)+1.0, 0.0))
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'yellow')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+            body_name = 'body7'
+            create_rigid_body(engine, body_name )
+            set_body_type(engine, body_name, 'free')
+            set_body_active(engine, body_name, True)
+            set_body_material(engine, body_name, 'crusty')
+            connect_shape(engine, body_name, 'sphere')
+            connect_force(engine, body_name, 'earth')
+            connect_force(engine, body_name, 'wind')
+            set_position(engine, body_name, V3.make(1.0, 2.0*sqrt(3.0)+1.0, 0.0))
+            set_orientation(engine, body_name,  Q.identity(), True)
+            set_visual_material(engine, body_name, 'turkis')
+            set_mass_properties_from_shape(engine, body_name, 10.0)
+
+        </python>
+    </engine>
+
+</scene>
+

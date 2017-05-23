@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<scene>
+
+    <visualization clear_color="[0.3, 0.3, 0.3]">
+        <camera eye="[0, 10, 10]" center="[0, 0, 0]"  up="[0, 1, 0]" near="0.1" far="100" fovy="45.0"/>
+
+        <light idx="0" position="[0, 10, 0]" target="[0, 0, 0]" Is="[0.5, 0.5, 0.5]"  Id="[0.7, 0.7, 0.7]"  Ia="[0.2, 0.2, 0.2]" cutoff_angle="45.0" attenuation="0.01"/>
+        <light idx="1" position="[0, -10, 0]" target="[0, 0, 0]" Is="[0.5, 0.5, 0.5]"  Id="[0.7, 0.7, 0.7]"  Ia="[0.2, 0.2, 0.2]" cutoff_angle="45.0" attenuation="0.01"/>
+
+        <grid on="True" start_x="-10.0" end_x="10.0"  cells_x="50" start_z="-10.0" end_z="10.0"  cells_z="50"/>
+
+        <visual_material
+                name="red"
+                wire_color="[0.9, 0.1, 0.1]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.75, 0.25, 0.25]"
+                Ka="[0.75, 0.25, 0.25]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="blue"
+                wire_color="[0.1, 0.1, 0.9]"
+                wire_thickness="2.0"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.25, 0.75]"
+                Ka="[0.25, 0.25, 0.75]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="grid"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.95, 0.95, 0.095]"
+                Ka="[0.95, 0.95, 0.095]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="contact"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.5, 1.0]"
+                Ka="[0.25, 0.5, 1.0]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="plug"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.55, 0.25, 0.25]"
+                Ka="[0.55, 0.25, 0.25]"
+                specular_exponent="10.0"
+        />
+
+        <visual_material
+                name="socket"
+                Ks="[1.0, 1.0, 1.0]"
+                Kd="[0.25, 0.25, 0.55]"
+                Ka="[0.25, 0.25, 0.55]"
+                specular_exponent="10.0"
+        />
+
+
+    </visualization>
+
+    <engine>
+        <material_library>
+            <behaviour materials="(mat, mat)" friction="[0.65, 0.65, 0.1]" restitution="0.0"/>
+        </material_library>
+
+        <shape name="tetrahedron">
+            <tetrahedron p0="[0, 0, 0]" p1="[2, 0, 0]"  p2="[0, 2, 0]" p3="[0, 0, 2]"/>
+        </shape>
+        <shape name="sphere">
+            <sphere radius="1.0"/>
+        </shape>
+        <shape name="ellipsoid">
+            <ellipsoid a="1.0" b="0.5" c="0.5"/>
+        </shape>
+        <shape name="cylinder">
+            <cylinder radius="0.5" height="2.0"/>
+        </shape>
+        <shape name="cone">
+            <cone radius="0.5" height="2.0"/>
+        </shape>
+        <shape name="capsule">
+            <capsule radius="0.5" height="2.0"/>
+        </shape>
+        <shape name="conical">
+            <conical bottom_radius="1.0" top_radius="0.5" height="2.0"/>
+        </shape>
+        <shape name="box">
+            <box width="2.0" height="1.0" depth="0.5"/>
+        </shape>
+        <shape name="cuboid">
+            <cuboid p0="[0, 0, 0]" p1="[2, 0, 0]"  p2="[1, 1, 0]" p3="[0, 1, 0]" p4="[0, 0, -1]" p5="[2, 0, -1]"  p6="[1, 1, -1]" p7="[0, 1, -1]"/>
+        </shape>
+        <body name="body_0" type="free" active="true"
+              material="mat"
+              r="[-3.0, -6.0, 0.0]"
+              shape="sphere" visual_material="red">
+        </body>
+        <body name="body_1" type="free" active="true"
+              material="mat"
+              r="[-3.0, -4.0, 0.0]"
+              shape="ellipsoid" visual_material="red">
+        </body>
+        <body name="body_2" type="free" active="true"
+              material="mat"
+              r="[-3.0, -2.0, 0.0]"
+              shape="cylinder" visual_material="red">
+        </body>
+        <body name="body_3" type="free" active="true"
+              material="mat"
+              r="[-3.0, 0.0, 0.0]"
+              shape="cone" visual_material="red">
+        </body>
+        <body name="body_4" type="free" active="true"
+              material="mat"
+              r="[-3.0, 2.0, 0.0]"
+              shape="capsule" visual_material="red">
+        </body>
+        <body name="body_5" type="free" active="true"
+              material="mat"
+              r="[-3.0, 4.0, 0.0]"
+              shape="conical" visual_material="red">
+        </body>
+        <body name="body_6" type="free" active="true"
+              material="mat"
+              r="[-3.0, 6.0, 0.0]"
+              shape="tetrahedron" visual_material="red">
+        </body>
+        <body name="body_7" type="free" active="true"
+              material="mat"
+              r="[-3.0, 8.0, 0.0]"
+              shape="box" visual_material="red">
+        </body>
+        <body name="body_8" type="free" active="true"
+              material="mat"
+              r="[-3.0, 10.0, 0.0]"
+              shape="cuboid" visual_material="red">
+
+        </body>
+        <python>
+            create_sphere_shape(engine, 'sphere2', 1.0 )
+            create_ellipsoid_shape(engine, 'ellipsoid2', 1.0, 0.5, 0.5 )
+            create_cylinder_shape(engine, 'cylinder2', 0.5, 2.0 )
+            create_cone_shape(engine, 'cone2', 0.5, 2.0 )
+            create_capsule_shape(engine, 'capsule2', 0.5, 2.0 )
+            create_conical_shape(engine, 'conical2', 1.0, 0.5, 2.0 )
+            create_tetrahedron_shape(engine, 'tet2', V3.make(0.0, 0.0, 0.0), V3.make(2.0, 0.0, 0.0), V3.make(0.0, 2.0, 0.0), V3.make(0.0, 0.0, 2.0) )
+            create_box_shape(engine, 'box2', 2.0, 1.0, 0.5 )
+            create_cuboid_shape(engine, 'cuboid2', V3.make(0, 0, 0), V3.make(2, 0, 0), V3.make(1, 1, 0), V3.make(0, 1, 0), V3.make(0, 0, -1), V3.make(2, 0, -1), V3.make(1, 1, -1), V3.make(0, 1, -1) )
+
+            for idx in range(9):
+                body_name = 'dummy' + str(idx)
+                create_rigid_body(engine, body_name )
+                set_body_type(engine, body_name, 'free')
+                set_body_active(engine, body_name, True)
+                set_body_material(engine, body_name, 'mat')
+                set_position(engine, body_name, V3.make(3.0, idx*2.0-6.0, 0.0))
+                set_visual_material(engine, body_name, 'blue')
+
+            connect_shape(engine, 'dummy0', 'sphere2')
+            connect_shape(engine, 'dummy1', 'ellipsoid2')
+            connect_shape(engine, 'dummy2', 'cylinder2')
+            connect_shape(engine, 'dummy3', 'cone2')
+            connect_shape(engine, 'dummy4', 'capsule2')
+            connect_shape(engine, 'dummy5', 'conical2')
+            connect_shape(engine, 'dummy6', 'tet2')
+            connect_shape(engine, 'dummy7', 'box2')
+            connect_shape(engine, 'dummy8', 'cuboid2')
+        </python>
+    </engine>
+
+</scene>
+
