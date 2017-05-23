@@ -88,6 +88,7 @@
 
         <body name="body_1" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, 0.0, 0.0]"
               shape="convex_1" visual_material="red">
         </body>
@@ -109,4 +110,3 @@
     </engine>
 
 </scene>
-

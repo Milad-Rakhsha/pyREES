@@ -99,46 +99,55 @@
         </shape>
         <body name="body_0" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, -6.0, 0.0]"
               shape="sphere" visual_material="red">
         </body>
         <body name="body_1" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, -4.0, 0.0]"
               shape="ellipsoid" visual_material="red">
         </body>
         <body name="body_2" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, -2.0, 0.0]"
               shape="cylinder" visual_material="red">
         </body>
         <body name="body_3" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, 0.0, 0.0]"
               shape="cone" visual_material="red">
         </body>
         <body name="body_4" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, 2.0, 0.0]"
               shape="capsule" visual_material="red">
         </body>
         <body name="body_5" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, 4.0, 0.0]"
               shape="conical" visual_material="red">
         </body>
         <body name="body_6" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, 6.0, 0.0]"
               shape="tetrahedron" visual_material="red">
         </body>
         <body name="body_7" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, 8.0, 0.0]"
               shape="box" visual_material="red">
         </body>
         <body name="body_8" type="free" active="true"
               material="mat"
+              density="1"
               r="[-3.0, 10.0, 0.0]"
               shape="cuboid" visual_material="red">
 
@@ -176,4 +185,3 @@
     </engine>
 
 </scene>
-

@@ -490,7 +490,7 @@ def __load_body(engine, body_tag):
     if body.is_scripted:
 
         if body.scripted_motion is not None:
-            raise RuntimeError('__load_body(): Body already had a scripted motion')
+            raise RuntimeError('__load_body(): Body' + name + ' already had a scripted motion')
 
         motion = KeyframeMotion()
 
@@ -500,7 +500,7 @@ def __load_body(engine, body_tag):
             q = UTIL.quaternion_from_xml(keyframe_tag, 'q', None)
 
             if time is None or r is None or q is None:
-                raise RuntimeError('__load_body(): Keyframe missing time, r or q attribute')
+                raise RuntimeError('__load_body(): Keyframe missing time, r or q attribute on body = ' + name)
 
             motion.create_keyframe(time, r, q)
 
@@ -525,11 +525,26 @@ def __load_body(engine, body_tag):
     mass = UTIL.float_from_xml(body_tag, 'mass', body.mass)
     inertia = UTIL.vector3_from_xml(body_tag, 'inertia', body.inertia)
     density = UTIL.float_from_xml(body_tag, 'density', None)
+
     if density is None:
-        set_mass(engine, name, mass)
-        set_inertia(engine, name, inertia)
+        if mass > 0.0:
+            set_mass(engine, name, mass)
+        else:
+            raise RuntimeError('__load_body(): Either missing mass or density attributes or mass attribute was '
+                               'non-positive on body = ' + name)
+
+        if inertia[0] > 0.0 and inertia[1] > 0.0 and inertia[2] > 0.0:
+            set_inertia(engine, name, inertia)
+        else:
+            raise RuntimeError(
+                '__load_body(): Either missing inertia or density attributes or inertia attribute has non-positive '
+                'entries on body = ' + name)
     else:
-        set_mass_properties_from_shape(engine, name, density)
+        if density > 0.0:
+            set_mass_properties_from_shape(engine, name, density)
+        else:
+            raise RuntimeError('__load_body(): Density attributes was '
+                               'non-positive on body = ' + name)
 
 
 def __save_body(body, engine_tag):

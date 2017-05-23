@@ -175,6 +175,7 @@
         <body name="body_3" type="scripted" active="true"
               material="stone"
               shape="cow"
+              density="10.0"
               visual_material="blue">
             <keyframe time="0.0" r="[-2.0, -2.0, 0.0]" q="rx:45"/>
             <keyframe time="1.2" r="[2.0, -2.0, 0.0]" q="ry:45"/>
@@ -228,4 +229,3 @@
     </engine>
 
 </scene>
-
