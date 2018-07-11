@@ -18,7 +18,7 @@ If one does not have "boost @1.59.0_2+no_single+python35+universal" then one
 can install this by writing:
 
 ```bash
-sudo port install boost @1.59.0_2+no_single+python35+universal
+sudo port install boost @1.66.0_3+no_single+python36+universal
 ```
 
 Next one must download OpenMesh source code from
@@ -53,8 +53,8 @@ sys.path.append('/usr/local/lib/python/')
 One may test the installation by using the Python console, like this:
 
 ```python
->>> import sys
->>> sys.path.append('/usr/local/lib/python/')
->>> from openmesh import *
->>> mesh = TriMesh()
+import sys
+sys.path.append('/usr/local/lib/python/')
+from openmesh import *
+mesh = TriMesh()
 ```
