@@ -254,7 +254,6 @@ def compute_inverse_mass_matrix(engine, x):
     k = 0
     for body in engine.rigid_bodies.values():
         x_offset = 7*k  # Position offset into x-array
-
         if body.is_free:
             q = x[x_offset+3:x_offset+7]  # Extract rotation part
             R = Q.to_matrix(q)
@@ -266,6 +265,22 @@ def compute_inverse_mass_matrix(engine, x):
     D = sparse.block_diag(blocks)  # TODO Kenny 2017-02-12: Verify this is the most efficient way of doing this!
     W = D.tobsr(blocksize=(3, 3))
     return W
+
+
+def compute_jacobian_matrix(engine):
+    N = len(engine.rigid_bodies)
+    K = len(engine.contact_points)
+
+    cols = N*6
+    rows = K*4
+    for name, joint in engine.joints.items():
+        rows += joint.dimensions()
+    #for name, limit in engine.joint_limits.items():
+    #    rows += limit.dimensions()
+    #for name, motor in engine.joint_motors.items():
+    #    rows += motor.dimensions()
+    #J = sparse.csr_matrix()
+    return None
 
 
 def simulation_stepper(engine, dt):

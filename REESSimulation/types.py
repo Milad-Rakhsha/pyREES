@@ -1,8 +1,8 @@
-import networkx as nx
 import REESMath.vector3 as V3
 import REESMath.quaternion as Q
 import REESMath.coordsys as C
 import REESMath.matrix3 as M3
+import numpy as np
 
 
 class MaterialBehaviour:
@@ -125,13 +125,34 @@ class ContactPoint(Constraint):
 
     def __init__(self, bodyA, bodyB, position=V3.zero(), normal=V3.k(), gap=0.0):
         super().__init__('ContactPoint', bodyA, bodyB)
-
         if abs(1.0 - V3.norm(normal)) > 0.1:
             raise RuntimeError('ContactPoint.init() was called with non-unit size normal')
-
         self.p = position
         self.n = normal
         self.g = gap
+
+    def compute_jacobians(self):
+        rA = self.p - self.bodyA.r
+        rB = self.p - self.bodyB.r
+        s, t, n = V3.make_orthonormal_vectors(self.n)
+        JA_v = - np.array([n, s, t, V3.zero()], dtype=np.float64)
+        JA_w = - np.array([V3.cross(rA, n), V3.cross(rA, s), V3.cross(rA, t), n], dtype=np.float64)
+        JB_v = np.array([n, s, t, V3.zero()], dtype=np.float64)
+        JB_w = np.array([V3.cross(rB, n), V3.cross(rB, s), V3.cross(rB, t), n], dtype=np.float64)
+        return JA_v, JA_w, JB_v, JB_w
+
+    def compute_error_terms(self, fps, error_reduction):
+        if fps < 0.0:
+            raise RuntimeError('compute_error_terms() Illegal fps value')
+        if fps > 200.0:
+            raise RuntimeWarning('compute_error_terms() Unlikely large fps value')
+        k_correction = fps * error_reduction
+        b = k_correction * self.g
+        return V3.make_vec4(0, 0, b, 0)
+
+    @staticmethod
+    def dimensions():
+        return 4
 
 
 class JointConnector:
@@ -170,8 +191,8 @@ class JointConnector:
 
 class Joint(Constraint):
 
-    def __init__(self, type, name, socket_body, plug_body):
-        super().__init__(type, socket_body, plug_body)
+    def __init__(self, joint_type, name, socket_body, plug_body):
+        super().__init__(joint_type, socket_body, plug_body)
         self.name = name
         self.socket = JointConnector(socket_body)
         self.plug = JointConnector(plug_body)
@@ -201,6 +222,10 @@ class BallJoint(Joint):
         k_correction = fps * self.error_reduction
         b = k_correction * (self.plug.get_world_anchor() - self.socket.get_world_anchor())
         return b
+
+    @staticmethod
+    def dimensions():
+        return 3
 
 
 class GraphEdge:
@@ -278,8 +303,6 @@ class SolverParameters:
 class Engine:
 
     def __init__(self):
-        self.graph = nx.Graph()
-
         self.rigid_bodies = dict()
         self.forces = dict()
         self.shapes = dict()
@@ -293,4 +316,3 @@ class Engine:
         self.solver_params = SolverParameters()
         self.profiler = Profiler()
         self.motion_recorder = MotionRecorder()
-

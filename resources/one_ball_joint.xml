@@ -177,7 +177,7 @@
             create_ball_joint(engine, 'my_second_ball_joint', 'body_3', 'body_4')
             set_socket_connector(engine, 'my_second_ball_joint', V3.make(0.0, 0.0, 1.5), Q.identity() )
             set_plug_connector(engine, 'my_second_ball_joint', V3.make(0.0, 0.0, -1.5), Q.identity() )
-
+            set_joint_error_reduction(engine, 'my_second_ball_joint', 0.1)
 
         </python>
     </engine>
